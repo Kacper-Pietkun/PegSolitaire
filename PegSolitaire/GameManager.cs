@@ -15,7 +15,7 @@ namespace PegSolitaire
 
         private Canvas canvasGame;
         private ComboBox comboBoxMap;
-        private List<Pawn> pawns = new List<Pawn>();
+        private List<List<Pawn>> pawns = new List<List<Pawn>>();
         private Pawn? activePawn = null;
         private bool isGameStarted = false;
         private bool isGameWon = false;
@@ -47,6 +47,7 @@ namespace PegSolitaire
 
         public void StartGame()
         {
+            activePawn = null;
             pawns = mapGenerator.GenerateMap(canvasGame.ActualWidth, canvasGame.ActualHeight, percentageOfCanvasPlayable);
             canvasGame.Children.Clear();
             RefreshEveryPawnOnCanvas();
@@ -59,30 +60,32 @@ namespace PegSolitaire
 
         public void PawnWasClicked(Ellipse ellipse)
         {
-            foreach (Pawn pawn in pawns)
+            for (int i = 0; i < pawns.Count; i++)
             {
-                if (pawn.CompareEllipses(ellipse))
+                for (int j = 0; j < pawns[i].Count; j++)
                 {
-                    Pawn? tempPawn = pawn.Clicked(canvasGame);
-                    if (tempPawn == null)
-                        activePawn = null;
-                    else
+                    if (pawns[i][j].CompareEllipses(ellipse))
                     {
-                        if (activePawn != null)
-                            activePawn.ChangeStatusAndDraw(Pawn.Status.Idle, canvasGame);
-                        activePawn = tempPawn;
+                        Pawn? tempPawn = pawns[i][j].Clicked(canvasGame);
+                        if (tempPawn == null)
+                            activePawn = null;
+                        else
+                        {
+                            if (activePawn != null)
+                                activePawn.ChangeStatusAndDraw(Pawn.Status.Idle, canvasGame);
+                            activePawn = tempPawn;
+                        }
+                        break;
                     }
-                    break;
                 }
             }
         }
 
         private void RefreshEveryPawnOnCanvas()
         {
-            foreach (Pawn pawn in pawns)
-            {
-                pawn.DrawItself(canvasGame);
-            }
+            for (int i = 0; i < pawns.Count; i++)
+                for (int j = 0; j < pawns[i].Count; j++)
+                    pawns[i][j].DrawItself(canvasGame);
         }
 
         internal void ResetActivePawn()

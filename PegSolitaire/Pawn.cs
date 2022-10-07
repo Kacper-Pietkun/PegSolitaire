@@ -16,7 +16,8 @@ namespace PegSolitaire
         {
             Idle,
             Active,
-            Empty
+            Empty,
+            Border
         }
 
         public Status status { get; set; }
@@ -54,26 +55,13 @@ namespace PegSolitaire
                 Height = height,
                 Fill = GetColor(),
                 StrokeThickness = 1,
-                Stroke = Brushes.Black
+                Stroke = Brushes.Black,
+                Opacity = GetOpacity()
             };
             Canvas.SetLeft(newEllipse, posX);
             Canvas.SetTop(newEllipse, posY);
             ellipse = newEllipse;
             canvas.Children.Add(newEllipse);
-        }
-
-        private SolidColorBrush GetColor()
-        {
-            switch (status)
-            {
-                case Status.Idle:
-                    return new SolidColorBrush(Color.FromRgb(255, 255, 204));
-                case Status.Active:
-                    return new SolidColorBrush(Color.FromRgb(238, 124, 124));
-                case Status.Empty:
-                    return new SolidColorBrush(Color.FromRgb(199, 191, 191));
-            }
-            return new SolidColorBrush(Color.FromRgb(255, 255, 255));
         }
 
         public bool CompareEllipses(Ellipse ellipse)
@@ -101,6 +89,35 @@ namespace PegSolitaire
         {
             this.status = status;
             DrawItself(canvas);
+        }
+
+        private SolidColorBrush GetColor()
+        {
+            switch (status)
+            {
+                case Status.Idle:
+                    return new SolidColorBrush(Color.FromRgb(255, 255, 204));
+                case Status.Active:
+                    return new SolidColorBrush(Color.FromRgb(238, 124, 124));
+                case Status.Empty:
+                    return new SolidColorBrush(Color.FromRgb(199, 191, 191));
+                case Status.Border:
+                    return new SolidColorBrush(Color.FromRgb(0, 0, 0));
+            }
+            return new SolidColorBrush(Color.FromRgb(255, 255, 255));
+        }
+
+        private double GetOpacity()
+        {
+            switch (status)
+            {
+                case Status.Idle:
+                case Status.Active:
+                    return 1;
+                case Status.Empty:
+                    return 0.4;
+            }
+            return 0;
         }
     }
 }

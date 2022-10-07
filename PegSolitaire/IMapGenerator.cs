@@ -9,6 +9,6 @@ namespace PegSolitaire
 {
     internal interface IMapGenerator
     {
-        public List<Pawn> GenerateMap(double canvasWidth, double canvasHeight, double percentageOfCanvasPlayable);
+        public List<List<Pawn>> GenerateMap(double canvasWidth, double canvasHeight, double percentageOfCanvasPlayable);
     }
 }
