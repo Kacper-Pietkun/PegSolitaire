@@ -31,7 +31,7 @@ namespace PegSolitaire
             {
                 pawns.Add(new List<Pawn>());
                 for (int j = 0; j < numberPawnsHeight; j++)
-                    pawns[i].Add(new Pawn(playableCanvasLeftTopX + i * pawnWidht, playableCanvasLeftTopY + j * pawnHeight, pawnWidht, pawnHeight, Pawn.Status.Border));
+                    pawns[i].Add(new Pawn(i, j, playableCanvasLeftTopX + i * pawnWidht, playableCanvasLeftTopY + j * pawnHeight, pawnWidht, pawnHeight, Pawn.Status.Border));
             }
 
             for (int i = 0; i < numberPawnsWidth; i++)

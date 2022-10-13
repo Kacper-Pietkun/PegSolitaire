@@ -21,6 +21,8 @@ namespace PegSolitaire
         }
 
         public Status status { get; set; }
+        public int indexI { get; set; }
+        public int indexJ { get; set; }
         public double posX { get; set; }
         public double posY { get; set; }
         public double width { get; set; }
@@ -31,8 +33,10 @@ namespace PegSolitaire
         
 
 
-        public Pawn(double posX, double posY, double width, double height, Status status = Status.Idle)
+        public Pawn(int indexI, int indexJ, double posX, double posY, double width, double height, Status status = Status.Idle)
         {
+            this.indexI = indexI;
+            this.indexJ = indexJ;
             this.posX = posX + pawnPadding;
             this.posY = posY + pawnPadding;
             this.width = width - 2 * pawnPadding;
@@ -67,23 +71,6 @@ namespace PegSolitaire
         public bool CompareEllipses(Ellipse ellipse)
         {
             return this.ellipse == ellipse;
-        }
-
-        public Pawn? Clicked(Canvas canvas)
-        {
-            switch (status)
-            {
-                case Status.Idle:
-                    ChangeStatusAndDraw(Status.Active, canvas);
-                    return this;
-                case Status.Active:
-                    ChangeStatusAndDraw(Status.Idle, canvas);
-                    return null;
-                case Status.Empty:
-                case Status.Border:
-                    return null;
-            }
-            return null;
         }
 
         public void ChangeStatusAndDraw(Status status, Canvas canvas)

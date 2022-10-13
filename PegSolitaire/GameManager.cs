@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
+using System.Xaml;
+using static PegSolitaire.Pawn;
 
 namespace PegSolitaire
 {
@@ -20,13 +22,13 @@ namespace PegSolitaire
         private IMapGenerator mapGenerator = new StandardMap();
         private float percentageOfCanvasPlayable = 66;
 
-        private GameManager() 
+        private GameManager()
         {
             foreach (Window window in Application.Current.Windows)
             {
                 if (window.GetType() == typeof(MainWindow))
                 {
-                    canvasGame = ((MainWindow) window).canvasGame;
+                    canvasGame = ((MainWindow)window).canvasGame;
                     comboBoxMap = ((MainWindow)window).comboBoxMap;
                 }
             }
@@ -55,6 +57,36 @@ namespace PegSolitaire
             this.mapGenerator = mapGenerator;
         }
 
+        private bool DeletePawnBetween(Pawn pawn1, Pawn pawn2)
+        {
+            int deletedI = 0;
+            int deletedJ = 0;
+
+            if (pawn1.indexI == pawn2.indexI)
+            {
+                deletedI = pawn1.indexI;
+                if (pawn1.indexJ > pawn2.indexJ)
+                    deletedJ = pawn1.indexJ - 1;
+                else
+                    deletedJ = pawn1.indexJ + 1;
+            }
+            else if (pawn1.indexJ == pawn2.indexJ)
+            {
+                deletedJ = pawn1.indexJ;
+                if (pawn1.indexI > pawn2.indexI)
+                    deletedI = pawn1.indexI - 1;
+                else
+                    deletedI = pawn1.indexI + 1;
+            }
+            if (pawns[deletedI][deletedJ].status == Pawn.Status.Idle)
+            {
+                pawns[deletedI][deletedJ].status = Pawn.Status.Empty;
+                pawns[deletedI][deletedJ].DrawItself(canvasGame);
+                return true;
+            }
+            return false;
+        }
+
         public void PawnWasClicked(Ellipse ellipse)
         {
             for (int i = 0; i < pawns.Count; i++)
@@ -63,19 +95,42 @@ namespace PegSolitaire
                 {
                     if (pawns[i][j].CompareEllipses(ellipse))
                     {
-                        Pawn? tempPawn = pawns[i][j].Clicked(canvasGame);
-                        if (tempPawn == null)
+                        if (activePawn != null && pawns[i][j].status == Pawn.Status.Empty && CanPawnBeMovedToThisSpot(activePawn.indexI, activePawn.indexJ, i, j))
+                        {
+                            if (DeletePawnBetween(activePawn, pawns[i][j]))
+                            {
+                                activePawn.ChangeStatusAndDraw(Status.Empty, canvasGame);
+                                pawns[i][j].ChangeStatusAndDraw(Status.Idle, canvasGame);
+                                activePawn = null;
+                            }
+                        }
+                        else if (activePawn != null && pawns[i][j].status == Pawn.Status.Active)
+                        {
+                            pawns[i][j].ChangeStatusAndDraw(Status.Idle, canvasGame);
                             activePawn = null;
-                        else
+                        }
+                        else if (pawns[i][j].status == Pawn.Status.Idle)
                         {
                             if (activePawn != null)
                                 activePawn.ChangeStatusAndDraw(Pawn.Status.Idle, canvasGame);
-                            activePawn = tempPawn;
+                            pawns[i][j].ChangeStatusAndDraw(Status.Active, canvasGame);
+                            activePawn = pawns[i][j];
                         }
-                        break;
+                        else if (pawns[i][j].status == Pawn.Status.Border)
+                            ResetActivePawn();
+
                     }
                 }
             }
+        }
+
+        private bool CanPawnBeMovedToThisSpot(int firstI, int firstJ, int secondI, int secondJ)
+        {
+            if (firstI == secondI && Math.Abs(firstJ - secondJ) == 2)
+                return true;
+            if (firstJ == secondJ && Math.Abs(firstI - secondI) == 2)
+                return true;
+            return false;
         }
 
         private void RefreshEveryPawnOnCanvas()
@@ -94,14 +149,13 @@ namespace PegSolitaire
             }
         }
 
-
         private bool CanPawnBeMoved(int i, int j)
         {
             if (i - 2 >= 0 && pawns[i - 1][j].status == Pawn.Status.Idle && pawns[i - 2][j].status == Pawn.Status.Empty)
                 return true;
             if (i + 2 < pawns.Count && pawns[i + 1][j].status == Pawn.Status.Idle && pawns[i + 2][j].status == Pawn.Status.Empty)
                 return true;
-            if (j - 2 >= 0 && pawns[i][j-1].status == Pawn.Status.Idle && pawns[i][j - 2].status == Pawn.Status.Empty)
+            if (j - 2 >= 0 && pawns[i][j - 1].status == Pawn.Status.Idle && pawns[i][j - 2].status == Pawn.Status.Empty)
                 return true;
             if (j + 2 < pawns[0].Count && pawns[i][j + 1].status == Pawn.Status.Idle && pawns[i][j + 2].status == Pawn.Status.Empty)
                 return true;
