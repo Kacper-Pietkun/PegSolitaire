@@ -52,6 +52,14 @@ namespace PegSolitaire
             RefreshEveryPawnOnCanvas();
         }
 
+        private void CheckGameStatus()
+        {
+            if (IsGameWon())
+                MessageBox.Show("You Won!");
+            else if (IsGameLost())
+                MessageBox.Show("You Lost!");
+        }
+
         public void SetMap(IMapGenerator mapGenerator)
         {
             this.mapGenerator = mapGenerator;
@@ -102,6 +110,7 @@ namespace PegSolitaire
                                 activePawn.ChangeStatusAndDraw(Status.Empty, canvasGame);
                                 pawns[i][j].ChangeStatusAndDraw(Status.Idle, canvasGame);
                                 activePawn = null;
+                                CheckGameStatus();
                             }
                         }
                         else if (activePawn != null && pawns[i][j].status == Pawn.Status.Active)
@@ -151,6 +160,8 @@ namespace PegSolitaire
 
         private bool CanPawnBeMoved(int i, int j)
         {
+            if (pawns[i][j].status != Pawn.Status.Idle)
+                return false;
             if (i - 2 >= 0 && pawns[i - 1][j].status == Pawn.Status.Idle && pawns[i - 2][j].status == Pawn.Status.Empty)
                 return true;
             if (i + 2 < pawns.Count && pawns[i + 1][j].status == Pawn.Status.Idle && pawns[i + 2][j].status == Pawn.Status.Empty)
@@ -171,7 +182,6 @@ namespace PegSolitaire
                         return false;
             return true;
         }
-
 
         private int GetNumberOfPawnsWithStatus(Pawn.Status status)
         {
