@@ -80,6 +80,7 @@ namespace PegSolitaire
                     ChangeStatusAndDraw(Status.Idle, canvas);
                     return null;
                 case Status.Empty:
+                case Status.Border:
                     return null;
             }
             return null;
