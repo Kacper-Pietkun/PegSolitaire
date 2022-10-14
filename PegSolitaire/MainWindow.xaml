@@ -27,11 +27,14 @@
         <Canvas x:Name="canvasGame" Background="LightBlue" Grid.Row="1" Grid.Column="1"
                 Focusable="True" Height="auto" MouseLeftButtonDown="CanvasGameMouseLeftButtonDown">
         </Canvas>
-        
-        <ComboBox x:Name="comboBoxMap" Grid.Column="1" Grid.Row="3" Width="180"
-                  Height="25" Margin="0,0,250,0" DropDownClosed="ComboBoxMapDropDownClosed"/>
+
+        <Button x:Name="buttonUndoMove" Grid.Column="1" Grid.Row="3"
+                Content="Undo" Width="120" Height="25" Margin="-375,0,0,0" Click="ButtonUndoMoveClick"/>
         <Button x:Name="buttonStartNewGame" Grid.Column="1" Grid.Row="3"
-                Content="Start New Game" Width="180" Height="25" Margin="250,0,0,0" Click="ButtonStartNewGameClick"/>
+                Content="Start New Game" Width="120" Height="25" Margin="0,0,-375,0" Click="ButtonStartNewGameClick"/>
+        <ComboBox x:Name="comboBoxMap" Grid.Column="1" Grid.Row="3" Width="120"
+                  Height="25" Margin="0,0,0,0" DropDownClosed="ComboBoxMapDropDownClosed"/>
+        
 
     </Grid>
 

@@ -63,5 +63,10 @@ namespace PegSolitaire
                 GameManager.GetGameManager().ResetActivePawn();
             }
         }
+
+        private void ButtonUndoMoveClick(object sender, RoutedEventArgs e)
+        {
+            GameManager.GetGameManager().UndoLastMove();
+        }
     }
 }
