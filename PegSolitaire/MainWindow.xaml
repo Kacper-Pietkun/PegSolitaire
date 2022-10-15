@@ -68,6 +68,7 @@
         <Label Grid.Column="1" Grid.Row="3" Margin="0,50,0,0" Width="220" Height="70"
                Content="{Binding GameStatistics}" ContentTemplate="{ StaticResource gameStatisticsTemplate}"/>
 
+        <local:PopUp x:Name="myPopUp" Grid.Column="1" Grid.Row="1" Width="200" Height="120"/>
     </Grid>
 
 </Window>

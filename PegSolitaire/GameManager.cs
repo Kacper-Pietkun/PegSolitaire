@@ -16,6 +16,8 @@ namespace PegSolitaire
     {
         private static readonly GameManager _instance = new GameManager();
 
+        public bool WonGame { get; set; }
+        public bool LostGame { get; set; }
         private Canvas canvasGame;
         private ComboBox comboBoxMap;
         private List<List<Pawn>> pawns = new List<List<Pawn>>();
@@ -27,6 +29,8 @@ namespace PegSolitaire
 
         private GameManager()
         {
+            WonGame = false;
+            LostGame = false;
             moves = new Stack<MoveDescriptor>();
             GameStatistics = new GameStatistics();
             foreach (Window window in Application.Current.Windows)
@@ -51,6 +55,8 @@ namespace PegSolitaire
 
         public void StartGame()
         {
+            WonGame = false;
+            LostGame = false;
             GameStatistics.Reset();
             moves = new Stack<MoveDescriptor>();
             activePawn = null;
@@ -62,9 +68,9 @@ namespace PegSolitaire
         private void CheckGameStatus()
         {
             if (IsGameWon())
-                MessageBox.Show("You Won!");
+                WonGame = true;
             else if (IsGameLost())
-                MessageBox.Show("You Lost!");
+                LostGame = true;
         }
 
         public void SetMap(IMapGenerator mapGenerator)
@@ -97,6 +103,7 @@ namespace PegSolitaire
                                 activePawn = null;
                                 moves.Push(moveDescriptor);
                                 GameStatistics.MovesDone++;
+                                CheckGameStatus();
                             }
                         }
                         else if (activePawn != null && pawns[i][j].status == Pawn.Status.Active)
@@ -133,9 +140,7 @@ namespace PegSolitaire
                 moveDescriptor.RevertMove();
                 moves.Pop();
                 moves.Push(moveDescriptor);
-                CheckGameStatus();
             }
-            
         }
 
         private void RefreshEveryPawnOnCanvas()
@@ -199,6 +204,9 @@ namespace PegSolitaire
         {
             if (moves.Count > 0 && moves.Peek().IsMoveReverted)
             {
+                activePawn = null;
+                WonGame = false;
+                LostGame = false;
                 GameStatistics.UndoDone++;
                 GameStatistics.MovesDone--;
                 MoveDescriptor move = moves.Pop();

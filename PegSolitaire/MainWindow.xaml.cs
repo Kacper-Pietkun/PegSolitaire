@@ -63,6 +63,16 @@ namespace PegSolitaire
             {
                 GameManager.GetGameManager().ResetActivePawn();
             }
+            if (GameManager.GetGameManager().WonGame)
+            {
+                myPopUp.Information = "You Won!";
+                myPopUp.IsShowed = true;
+            }
+            else if (GameManager.GetGameManager().LostGame)
+            {
+                myPopUp.Information = "You Lost!";
+                myPopUp.IsShowed = true;
+            }
         }
 
         private void UndoCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)

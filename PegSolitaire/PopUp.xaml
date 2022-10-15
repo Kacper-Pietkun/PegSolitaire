@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="PegSolitaire.PopUp"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PegSolitaire"
+             mc:Ignorable="d" 
+             d:DesignHeight="120" d:DesignWidth="200">
+    <Border x:Name="container" BorderBrush="Black" BorderThickness="2">
+        <Grid >
+            <Grid.Background>
+                <SolidColorBrush Color="PaleVioletRed" Opacity="0.85"/>
+            </Grid.Background>
+            <Label x:Name="labelTitle" Content="Game Information"
+                   HorizontalAlignment="Center" VerticalAlignment="Top"
+                   FontSize="20" FontWeight="Bold"/>
+            <Label x:Name="labelInformation" Content="{Binding Path=Information}" Margin="0,0,0,10"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Button x:Name="buttonClosePopUp" VerticalAlignment="Bottom"
+                    Content="Ok" Width="120" Height="25" Margin="0,0,0,10" Click="ButtonClosePopUpClick"/>
+        </Grid>
+    </Border>
+</UserControl>
