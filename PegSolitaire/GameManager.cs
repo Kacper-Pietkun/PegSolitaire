@@ -92,8 +92,10 @@ namespace PegSolitaire
                             {
                                 Animator animator = new Animator();
                                 activePawn.DrawItself(canvasGame);
+                                pawns[intermediatePoint.X][intermediatePoint.Y].DrawItself(canvasGame);
                                 animator.MovePawn(this, canvasGame, pawns, moveDescriptor);
                                 activePawn = null;
+                                moves.Push(moveDescriptor);
                                 GameStatistics.MovesDone++;
                             }
                         }
@@ -121,11 +123,19 @@ namespace PegSolitaire
         {
             canvasGame.Children.Remove(animationEllipse);
             pawns[moveDescriptor.DestinationIndices.X][moveDescriptor.DestinationIndices.Y].DrawItself(canvasGame);
-            System.Drawing.Point intermediatePoint = MovesExecutor.InferIntermediateIndices(moveDescriptor.SourceIndices, moveDescriptor.DestinationIndices);
-            pawns[intermediatePoint.X][intermediatePoint.Y].DrawItself(canvasGame);
-            moveDescriptor.RevertMove();
-            moves.Push(moveDescriptor);
-            CheckGameStatus();
+            if (moveDescriptor.IsMoveReverted == true)
+            {
+                System.Drawing.Point intermediatePoint = MovesExecutor.InferIntermediateIndices(moveDescriptor.SourceIndices, moveDescriptor.DestinationIndices);
+                pawns[intermediatePoint.X][intermediatePoint.Y].DrawItself(canvasGame);
+            }
+            else
+            {
+                moveDescriptor.RevertMove();
+                moves.Pop();
+                moves.Push(moveDescriptor);
+                CheckGameStatus();
+            }
+            
         }
 
         private void RefreshEveryPawnOnCanvas()
@@ -187,7 +197,7 @@ namespace PegSolitaire
 
         public void UndoLastMove()
         {
-            if (moves.Count > 0)
+            if (moves.Count > 0 && moves.Peek().IsMoveReverted)
             {
                 GameStatistics.UndoDone++;
                 GameStatistics.MovesDone--;
@@ -195,9 +205,9 @@ namespace PegSolitaire
                 bool succeed;
                 System.Drawing.Point intermediatePoint;
                 (succeed, intermediatePoint) = MovesExecutor.ExecuteMove(pawns, move);
+                Animator animator = new Animator();
                 pawns[move.SourceIndices.X][move.SourceIndices.Y].DrawItself(canvasGame);
-                pawns[move.DestinationIndices.X][move.DestinationIndices.Y].DrawItself(canvasGame);
-                pawns[intermediatePoint.X][intermediatePoint.Y].DrawItself(canvasGame);
+                animator.MovePawn(this, canvasGame, pawns, move);
             }
         }
     }

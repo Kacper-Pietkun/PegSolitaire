@@ -39,7 +39,6 @@ namespace PegSolitaire
                 Canvas.LeftProperty, myControllableClockX);
             newEllipse.ApplyAnimationClock(
                 Canvas.TopProperty, myControllableClockY);
-            int pos= 2;
             myControllableClockX.Completed += new EventHandler((sender, e) => gameManager.AfterAnimationHandler(sender, e, newEllipse, moveDescriptor));
         }
     }
