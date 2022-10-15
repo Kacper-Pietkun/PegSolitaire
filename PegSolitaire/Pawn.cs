@@ -29,7 +29,7 @@ namespace PegSolitaire
         public double height { get; set; }
         public bool CanMove { get; set; } = false;
         private double pawnPadding = 3;
-        private Ellipse? ellipse;
+        public Ellipse? Ellipse { get; set; }
         
 
         public Pawn(int indexI, int indexJ, double posX, double posY, double width, double height, Status status = Status.Idle)
@@ -41,15 +41,15 @@ namespace PegSolitaire
             this.width = width - 2 * pawnPadding;
             this.height = height - 2 * pawnPadding;
             this.status = status;
-            ellipse = null;
+            Ellipse = null;
         }
 
         public void DrawItself(Canvas canvas)
         {
-            if (ellipse != null)
+            if (Ellipse != null)
             {
-                canvas.Children.Remove(ellipse);
-                ellipse = null;
+                canvas.Children.Remove(Ellipse);
+                Ellipse = null;
             }
 
             Ellipse newEllipse = new Ellipse
@@ -63,13 +63,13 @@ namespace PegSolitaire
             };
             Canvas.SetLeft(newEllipse, posX);
             Canvas.SetTop(newEllipse, posY);
-            ellipse = newEllipse;
+            Ellipse = newEllipse;
             canvas.Children.Add(newEllipse);
         }
 
         public bool CompareEllipses(Ellipse ellipse)
         {
-            return this.ellipse == ellipse;
+            return this.Ellipse == ellipse;
         }
 
         public void ChangeStatusAndDraw(Status status, Canvas canvas)

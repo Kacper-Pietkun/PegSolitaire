@@ -35,7 +35,7 @@ namespace PegSolitaire
             return false;
         }
 
-        private static Point InferIntermediateIndices(Point sourceIndices, Point destinationIndices)
+        public static Point InferIntermediateIndices(Point sourceIndices, Point destinationIndices)
         {
             Point intermediateIndices = new Point();
             if (sourceIndices.X == destinationIndices.X)

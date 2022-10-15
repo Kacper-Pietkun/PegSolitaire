@@ -90,14 +90,11 @@ namespace PegSolitaire
                             (succeed, intermediatePoint) = MovesExecutor.ExecuteMove(pawns, moveDescriptor);
                             if (succeed)
                             {
+                                Animator animator = new Animator();
                                 activePawn.DrawItself(canvasGame);
-                                pawns[i][j].DrawItself(canvasGame);
-                                pawns[intermediatePoint.X][intermediatePoint.Y].DrawItself(canvasGame);
-                                moveDescriptor.RevertMove();
-                                moves.Push(moveDescriptor);
+                                animator.MovePawn(this, canvasGame, pawns, moveDescriptor);
                                 activePawn = null;
                                 GameStatistics.MovesDone++;
-                                CheckGameStatus();
                             }
                         }
                         else if (activePawn != null && pawns[i][j].status == Pawn.Status.Active)
@@ -118,6 +115,17 @@ namespace PegSolitaire
                     }
                 }
             }
+        }
+
+        public void AfterAnimationHandler(Object? sender, EventArgs e, Ellipse animationEllipse, MoveDescriptor moveDescriptor)
+        {
+            canvasGame.Children.Remove(animationEllipse);
+            pawns[moveDescriptor.DestinationIndices.X][moveDescriptor.DestinationIndices.Y].DrawItself(canvasGame);
+            System.Drawing.Point intermediatePoint = MovesExecutor.InferIntermediateIndices(moveDescriptor.SourceIndices, moveDescriptor.DestinationIndices);
+            pawns[intermediatePoint.X][intermediatePoint.Y].DrawItself(canvasGame);
+            moveDescriptor.RevertMove();
+            moves.Push(moveDescriptor);
+            CheckGameStatus();
         }
 
         private void RefreshEveryPawnOnCanvas()
