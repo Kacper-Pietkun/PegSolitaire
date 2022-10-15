@@ -14,12 +14,27 @@
     </Window.CommandBindings>
 
     <Window.Resources>
+        
         <Style TargetType="Button">
             <Setter Property="BorderThickness" Value="2"/>
         </Style>
         <Style TargetType="ComboBox">
             <Setter Property="BorderThickness" Value="2"/>
         </Style>
+
+        <DataTemplate x:Key="gameStatisticsTemplate">
+            <StackPanel>
+                <TextBlock>
+                    <Run Text="Moves: "/>   
+                    <TextBlock Text="{Binding MovesDone}"/>
+                </TextBlock>
+                <TextBlock>
+                    <Run Text="Undo: "/>   
+                    <TextBlock Text="{Binding UndoDone}"/>
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate>
+
     </Window.Resources>
     
     <Grid>
@@ -30,9 +45,9 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="10"/>
-            <RowDefinition Height="8.6*"/>
+            <RowDefinition Height="8*"/>
             <RowDefinition Height="10"/>
-            <RowDefinition Height="1.4*"/>
+            <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         <Border Grid.Row="0" Grid.Column="0"  Background="Black" Grid.ColumnSpan="3"/>
         <Border Grid.Row="2" Grid.Column="0"  Background="Black" Grid.ColumnSpan="3"/>
@@ -45,11 +60,14 @@
         </Canvas>
         
         <Button x:Name="buttonStartNewGame" Grid.Column="1" Grid.Row="3"
-                Content="Start New Game" Width="120" Height="25" Margin="0,0,-375,0" Click="ButtonStartNewGameClick"/>
+                Content="Start New Game" Width="120" Height="25" Margin="0,0,-375,50" Click="ButtonStartNewGameClick"/>
         <ComboBox x:Name="comboBoxMap" Grid.Column="1" Grid.Row="3" Width="120"
-                  Height="25" Margin="0,0,0,0" DropDownClosed="ComboBoxMapDropDownClosed"/>
+                  Height="25" Margin="0,0,0,50" DropDownClosed="ComboBoxMapDropDownClosed"/>
         <Button Command="ApplicationCommands.Undo" x:Name="buttonUndoMove" Grid.Column="1" Grid.Row="3"
-                Content="Undo" Width="120" Height="25" Margin="-375,0,0,0"/>
+                Content="Undo" Width="120" Height="25" Margin="-375,0,0,50"/>
+        <Label Grid.Column="1" Grid.Row="3" Margin="0,50,0,0" Width="220" Height="70"
+               Content="{Binding GameStatistics}" ContentTemplate="{ StaticResource gameStatisticsTemplate}"/>
+
     </Grid>
 
 </Window>

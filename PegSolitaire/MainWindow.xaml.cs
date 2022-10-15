@@ -26,6 +26,7 @@ namespace PegSolitaire
         {
             InitializeComponent();
             InitializeComboBoxMap();
+            DataContext = GameManager.GetGameManager();
         }
 
         private void InitializeComboBoxMap()

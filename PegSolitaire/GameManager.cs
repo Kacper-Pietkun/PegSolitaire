@@ -23,10 +23,12 @@ namespace PegSolitaire
         private Pawn? activePawn = null;
         private IMapGenerator mapGenerator = new StandardMap();
         private float percentageOfCanvasPlayable = 66;
+        public GameStatistics GameStatistics { get; set; } = new GameStatistics(4, 1);
 
         private GameManager()
         {
             moves = new Stack<MoveDescriptor>();
+            GameStatistics = new GameStatistics();
             foreach (Window window in Application.Current.Windows)
             {
                 if (window.GetType() == typeof(MainWindow))
@@ -49,6 +51,7 @@ namespace PegSolitaire
 
         public void StartGame()
         {
+            GameStatistics.Reset();
             moves = new Stack<MoveDescriptor>();
             activePawn = null;
             pawns = mapGenerator.GenerateMap(canvasGame.ActualWidth, canvasGame.ActualHeight, percentageOfCanvasPlayable);
@@ -93,6 +96,7 @@ namespace PegSolitaire
                                 moveDescriptor.RevertMove();
                                 moves.Push(moveDescriptor);
                                 activePawn = null;
+                                GameStatistics.MovesDone++;
                                 CheckGameStatus();
                             }
                         }
@@ -177,6 +181,8 @@ namespace PegSolitaire
         {
             if (moves.Count > 0)
             {
+                GameStatistics.UndoDone++;
+                GameStatistics.MovesDone--;
                 MoveDescriptor move = moves.Pop();
                 bool succeed;
                 System.Drawing.Point intermediatePoint;
