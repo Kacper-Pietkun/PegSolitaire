@@ -19,13 +19,14 @@ namespace PegSolitaire
         private Canvas canvasGame;
         private ComboBox comboBoxMap;
         private List<List<Pawn>> pawns = new List<List<Pawn>>();
-        private Stack<MoveDescriptor> moves = new Stack<MoveDescriptor>();
+        public Stack<MoveDescriptor> moves { get; set; }
         private Pawn? activePawn = null;
         private IMapGenerator mapGenerator = new StandardMap();
         private float percentageOfCanvasPlayable = 66;
 
         private GameManager()
         {
+            moves = new Stack<MoveDescriptor>();
             foreach (Window window in Application.Current.Windows)
             {
                 if (window.GetType() == typeof(MainWindow))
@@ -48,6 +49,7 @@ namespace PegSolitaire
 
         public void StartGame()
         {
+            moves = new Stack<MoveDescriptor>();
             activePawn = null;
             pawns = mapGenerator.GenerateMap(canvasGame.ActualWidth, canvasGame.ActualHeight, percentageOfCanvasPlayable);
             canvasGame.Children.Clear();
