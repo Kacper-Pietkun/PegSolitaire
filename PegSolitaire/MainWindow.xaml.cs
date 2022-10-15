@@ -64,7 +64,12 @@ namespace PegSolitaire
             }
         }
 
-        private void ButtonUndoMoveClick(object sender, RoutedEventArgs e)
+        private void UndoCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = GameManager.GetGameManager().moves.Count > 0;
+        }
+
+        private void UndoCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             GameManager.GetGameManager().UndoLastMove();
         }

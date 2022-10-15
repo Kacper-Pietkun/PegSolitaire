@@ -6,6 +6,22 @@
         xmlns:local="clr-namespace:PegSolitaire"
         mc:Ignorable="d" FontSize="15" FontFamily="Segoe UI Light"
         Title="Peg Solitaire" Height="600" Width="600">
+
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Undo"
+                        CanExecute="UndoCommandCanExecute"
+                        Executed="UndoCommandExecuted" />
+    </Window.CommandBindings>
+
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+    </Window.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10"/>
@@ -27,15 +43,13 @@
         <Canvas x:Name="canvasGame" Background="LightBlue" Grid.Row="1" Grid.Column="1"
                 Focusable="True" Height="auto" MouseLeftButtonDown="CanvasGameMouseLeftButtonDown">
         </Canvas>
-
-        <Button x:Name="buttonUndoMove" Grid.Column="1" Grid.Row="3"
-                Content="Undo" Width="120" Height="25" Margin="-375,0,0,0" Click="ButtonUndoMoveClick"/>
+        
         <Button x:Name="buttonStartNewGame" Grid.Column="1" Grid.Row="3"
                 Content="Start New Game" Width="120" Height="25" Margin="0,0,-375,0" Click="ButtonStartNewGameClick"/>
         <ComboBox x:Name="comboBoxMap" Grid.Column="1" Grid.Row="3" Width="120"
                   Height="25" Margin="0,0,0,0" DropDownClosed="ComboBoxMapDropDownClosed"/>
-        
-
+        <Button Command="ApplicationCommands.Undo" x:Name="buttonUndoMove" Grid.Column="1" Grid.Row="3"
+                Content="Undo" Width="120" Height="25" Margin="-375,0,0,0"/>
     </Grid>
 
 </Window>
