@@ -13,7 +13,7 @@ namespace PegSolitaire
         public static (bool, Point) ExecuteMove(List<List<Pawn>> pawns, MoveDescriptor moveDescriptor)
         {
             Point intermediateIndices = InferIntermediateIndices(moveDescriptor.SourceIndices, moveDescriptor.DestinationIndices);
-            if (IsMoveEvenPossible(pawns, moveDescriptor.SourceIndices, moveDescriptor.DestinationIndices, intermediateIndices))
+            if (moveDescriptor.IsMoveReverted || IsMoveEvenPossible(pawns, moveDescriptor.SourceIndices, moveDescriptor.DestinationIndices, intermediateIndices))
             {
                 MovePawn(pawns, moveDescriptor.SourceIndices, moveDescriptor.DestinationIndices);
                 if (moveDescriptor.IsMoveReverted)

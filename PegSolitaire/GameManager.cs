@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Shapes;
 using System.Xaml;
 using static PegSolitaire.Pawn;
@@ -18,6 +19,7 @@ namespace PegSolitaire
         private Canvas canvasGame;
         private ComboBox comboBoxMap;
         private List<List<Pawn>> pawns = new List<List<Pawn>>();
+        private Stack<MoveDescriptor> moves = new Stack<MoveDescriptor>();
         private Pawn? activePawn = null;
         private IMapGenerator mapGenerator = new StandardMap();
         private float percentageOfCanvasPlayable = 66;
@@ -86,7 +88,8 @@ namespace PegSolitaire
                                 activePawn.DrawItself(canvasGame);
                                 pawns[i][j].DrawItself(canvasGame);
                                 pawns[intermediatePoint.X][intermediatePoint.Y].DrawItself(canvasGame);
-                                // TODO: ADD MOVE TO UNDO MOVES STACK
+                                moveDescriptor.RevertMove();
+                                moves.Push(moveDescriptor);
                                 activePawn = null;
                                 CheckGameStatus();
                             }
@@ -110,8 +113,6 @@ namespace PegSolitaire
                 }
             }
         }
-
-        
 
         private void RefreshEveryPawnOnCanvas()
         {
@@ -172,7 +173,16 @@ namespace PegSolitaire
 
         public void UndoLastMove()
         {
-            throw new NotImplementedException();
+            if (moves.Count > 0)
+            {
+                MoveDescriptor move = moves.Pop();
+                bool succeed;
+                System.Drawing.Point intermediatePoint;
+                (succeed, intermediatePoint) = MovesExecutor.ExecuteMove(pawns, move);
+                pawns[move.SourceIndices.X][move.SourceIndices.Y].DrawItself(canvasGame);
+                pawns[move.DestinationIndices.X][move.DestinationIndices.Y].DrawItself(canvasGame);
+                pawns[intermediatePoint.X][intermediatePoint.Y].DrawItself(canvasGame);
+            }
         }
     }
 }

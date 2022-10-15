@@ -32,7 +32,6 @@ namespace PegSolitaire
         private Ellipse? ellipse;
         
 
-
         public Pawn(int indexI, int indexJ, double posX, double posY, double width, double height, Status status = Status.Idle)
         {
             this.indexI = indexI;
