@@ -6,11 +6,22 @@
              xmlns:local="clr-namespace:PegSolitaire"
              mc:Ignorable="d" 
              d:DesignHeight="120" d:DesignWidth="200">
+    <UserControl.Resources>
+        <Style TargetType="Grid">
+            <Setter Property="Background" Value="PaleVioletRed"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="1"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="False">
+                    <Setter Property="Opacity" Value="0.85"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
     <Border x:Name="container" BorderBrush="Black" BorderThickness="2">
         <Grid >
-            <Grid.Background>
-                <SolidColorBrush Color="PaleVioletRed" Opacity="0.85"/>
-            </Grid.Background>
+            
             <Label x:Name="labelTitle" Content="Game Information"
                    HorizontalAlignment="Center" VerticalAlignment="Top"
                    FontSize="20" FontWeight="Bold"/>
